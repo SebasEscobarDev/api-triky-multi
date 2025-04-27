@@ -1,0 +1,51 @@
+# @api = http://54.197.33.96:8000/api/users
+@api = http://localhost:8000/users
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk5ZDEwZmE1LWYyOWMtNGY0OC1iMDVhLWMzZjE4N2Q3YjlhMyIsImlhdCI6MTc0NTcyMjU0MywiZXhwIjoxNzQ1ODA4OTQzfQ.18_H1l_tjdpKDT8z1b6xojrnN8mLEx_0r15UTfrX8qI
+@id_user = 99d10fa5-f29c-4f48-b05a-c3f187d7b9a3
+
+
+### GET ALL
+GET {{api}}/
+
+### CREATE
+POST {{api}}/
+Content-Type: application/json
+
+{
+    "email": "sebas22185@gmail.com",
+    "password": "Qaws12pj-22"
+}
+
+### ACTUALIZAR
+PUT {{api}}/
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "id": "{{id_user}}",
+    "email": "sebas22185@gmail.com",
+    "password": "Qaws12pj-22",
+    "name": "Sebastian",
+    "lastname": "Gonzalez Escobar",
+    "birth_date": "1997-02-04",
+    "genre_id": "1"
+}
+
+### LOGIN
+POST {{api}}/login
+Content-Type: application/json
+
+{
+    "email":"sebas22185@gmail.com",
+    "password": "Qaws12pj-22"
+}
+
+### GET BY ID
+GET {{api}}/{{id_user}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### DELETE
+DELETE {{api}}/all
+Content-Type: application/json
+Authorization: Bearer {{token}}
