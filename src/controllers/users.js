@@ -1,7 +1,6 @@
 import User from '../ORM/factory/User.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { handleSequelizeError } from './handleErrors/sequalizeErrors.js'
 import { env } from '../environment.js'
 
 
@@ -22,8 +21,7 @@ export const getAll = async (req, res, next) => {
     }
     return res.status(200).json(response)
   } catch (e) {
-    const errors = e.errors ? handleSequelizeError(e) : { message: 'Error en la base de datos' }
-    return res.status(409).json(errors)
+    return res.status(409).json(e)
   }
 }
 
@@ -33,8 +31,7 @@ export const getItem = async (req, res, next) => {
     const item = await User.getItem(req.params.id)
     return res.status(200).json(item)
   } catch (e) {
-    const errors = e.errors ? handleSequelizeError(e) : { message: 'Error en la base de datos' }
-    return res.status(409).json(errors)
+    return res.status(409).json(e)
   }
 }
 
@@ -47,8 +44,7 @@ export const createItem = async (req, res, next) => {
       user: item
     })
   } catch (e) {
-    const errors = e.errors ? handleSequelizeError(e) : { message: 'Error en la base de datos' }
-    return res.status(409).json(errors)
+    return res.status(409).json(e)
   }
 }
 
@@ -57,8 +53,7 @@ export const updateItem = async (req, res, next) => {
     const item = await User.updateItem(req.body)
     return res.status(200).json(item)
   } catch (e) {
-    const errors = e.errors ? handleSequelizeError(e) : { message: 'Error en la base de datos' }
-    return res.status(409).json(errors)
+    return res.status(409).json(e)
   }
 }
 
@@ -68,8 +63,7 @@ export const deleteItem = async (req, res, next) => {
     const response = item ? 'Registro eliminado' : 'No se pudo eliminar'
     return res.status(200).json(response)
   } catch (e) {
-    const errors = e.errors ? handleSequelizeError(e) : { message: 'Error en la base de datos' }
-    return res.status(409).json(errors)
+    return res.status(409).json(e)
   }
 }
 
@@ -78,8 +72,7 @@ export const deleteAll = async (req, res, next) => {
     const response = await User.deleteAll()
     return res.status(200).json(response)
   } catch (e) {
-    const errors = e.errors ? handleSequelizeError(e) : { message: 'Error en la base de datos' }
-    return res.status(409).json(errors)
+    return res.status(409).json(e)
   }
 }
 
@@ -100,14 +93,15 @@ export const login = async (req, res) => {
       })
     }
     // const token = jwt.sign({ id: user.id }, env.SECRET_KEY, { expiresIn: '24h' })
-    const token = jwt.sign({ id: user.id }, env.SECRET_KEY, {})
+    console.log("env.SECRET_KEY")
+    console.log(env.SECRET_KEY)
+    console.log("------------------")
+    const token = jwt.sign({ id: user.id, role: user.role }, env.SECRET_KEY, { expiresIn: '24h' })
     return res.json({
       token,
       user
     })
   } catch (e) {
-    console.log(e)
-    const errors = e.errors ? handleSequelizeError(e) : { message: 'Error en la base de datos' }
-    return res.status(409).json(errors)
+    return res.status(409).json(e)
   }
 }

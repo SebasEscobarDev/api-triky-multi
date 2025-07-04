@@ -1,0 +1,6 @@
+Crea todos los documentos y funciones necesarias para implementar todos los endpoints para el modelo FinanceRecord del ORM tomando de referencia todo el flujo de users, 
+1- crea el documento de rutas finance-records.js
+2- importalo en index.js
+3- crea el controlador finance-records.js
+4- crea el factory FinanceRecord.js
+5- crea los operations FinanceRecord.js

@@ -15,7 +15,7 @@ export const validateToken = async (req, res, next) => {
         return res.status(401).json({ mensaje: 'Token de seguridad inválido.' })
       }
       // Pasar el token decodificado a las rutas protegidas
-      req.usuario = decoded
+      req.user = decoded
       next()
     })
   } catch (err) {

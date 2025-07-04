@@ -1,7 +1,11 @@
 import { DataTypes, Model } from 'sequelize'
-import { sequelize } from '../../database/connection.js'
+import { sequelize } from '../database/connection.js'
 
-class User extends Model { }
+class User extends Model {
+  static associate(models) {
+    User.hasMany(models.Sale, { foreignKey: 'user_id' });
+  }
+}
 User.init({
   id: {
     type: DataTypes.UUID,
@@ -22,6 +26,7 @@ User.init({
       len: [3, 255]
     }
   },
+  role: DataTypes.ENUM('admin', 'empleado'),
   name: {
     type: DataTypes.STRING,
     allowNull: true
