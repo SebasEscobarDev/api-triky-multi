@@ -1,4 +1,4 @@
-import UserModel from '../operations/User.js'
+import UserModel from '../services/User.js'
 const operations = new UserModel()
 
 class User {

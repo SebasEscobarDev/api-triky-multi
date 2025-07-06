@@ -1,4 +1,4 @@
-import { env } from "../../environment.js"
+import { env } from "../environment.js"
 
 export default {
   username: env.DB_USER,

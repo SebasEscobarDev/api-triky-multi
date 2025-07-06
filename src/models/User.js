@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize'
-import { sequelize } from '../database/connection.js'
+import { sequelize } from '../database/sequelize.js'
 
 class User extends Model {
   static associate(models) {

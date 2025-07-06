@@ -7,10 +7,10 @@ import cors from 'cors'
 import { env } from './environment.js'
 
 // conectar db
-import { sequelize } from './ORM/database/connection.js'
+import { sequelize } from './database/sequelize.js'
 // rutas
 import usersRoutes from './routes/users.js'
-import './ORM/models/associations.js'
+import './models/associations.js'
 
 import cl from 'picocolors'
 

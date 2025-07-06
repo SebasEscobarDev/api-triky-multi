@@ -39,7 +39,11 @@ export async function up(queryInterface, Sequelize) {
       name: 'Empleado 1',
       email: 'empleado1@correo.com',
       password: passwordHash,
-      role: 'empleado'
+      role: 'empleado',
+      genre_id: 1,
+      birth_date: '1990-01-01',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     });
   }
   

@@ -1,4 +1,4 @@
-import User from '../ORM/factory/User.js'
+import User from '../factory/User.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { env } from '../environment.js'
