@@ -3,7 +3,14 @@ import { sequelize } from '../database/sequelize.js'
 
 class User extends Model {
   static associate(models) {
-    User.hasMany(models.Sale, { foreignKey: 'user_id' });
+    User.hasMany(models.Game, { foreignKey: 'player1_id', as: 'gamesAsPlayer1' });
+    User.hasMany(models.Game, { foreignKey: 'player2_id', as: 'gamesAsPlayer2' });
+    User.hasMany(models.Game, { foreignKey: 'current_player_id', as: 'gamesWithCurrentTurn' });
+    User.hasMany(models.Game, { foreignKey: 'winner_id', as: 'wonGames' });
+    User.hasMany(models.GameMove, { foreignKey: 'user_id' });
+    User.hasOne(models.Ranking, { foreignKey: 'user_id' });
+    User.hasOne(models.UserSetting, { foreignKey: 'user_id' });
+    User.hasMany(models.Notification, { foreignKey: 'user_id' });
   }
 }
 User.init({
@@ -11,46 +18,61 @@ User.init({
     type: DataTypes.UUID,
     primaryKey: true,
   },
+  google_id: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    comment: 'ID para autenticación Google'
+  },
+  google_name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    comment: 'Nombre obtenido de Google'
+  },
   email: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
     validate: {
       isEmail: true
-    }
+    },
+    comment: 'Email obtenido de Google'
   },
-  password: {
+  photo_url: {
     type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      len: [3, 255]
-    }
+    allowNull: true,
+    comment: 'URL de foto de Google'
   },
-  role: DataTypes.ENUM('admin', 'empleado'),
-  name: {
+  custom_name: {
     type: DataTypes.STRING,
-    allowNull: true
+    allowNull: true,
+    comment: 'Nombre personalizado por el usuario'
   },
-  lastname: {
+  custom_photo_url: {
     type: DataTypes.STRING,
-    allowNull: true
+    allowNull: true,
+    comment: 'URL de foto personalizada'
   },
-  birth_date: {
+  password_hash: {
     type: DataTypes.STRING,
-    allowNull: true
+    allowNull: true,
+    comment: 'Hash de contraseña (opcional)'
   },
-  genre_id: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
+
   created_at: {
-    type: DataTypes.STRING,
-    allowNull: true
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
   },
   updated_at: {
-    type: DataTypes.STRING,
-    allowNull: true
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
   },
+  last_login_at: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: 'Fecha del último inicio de sesión'
+  }
 }, {
   sequelize,
   modelName: 'User',

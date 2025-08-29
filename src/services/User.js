@@ -1,22 +1,23 @@
 /* eslint-disable camelcase */
 import UserModel from '../models/User.js'
-import moment from 'moment'
 import bcrypt from 'bcryptjs'
 import uuid4 from 'uuid4'
 
 const ARRAY_ATTRIBUTES = [
   'id',
+  'google_id',
   'email',
-  // 'password', hide this field
-  'name',
-  'lastname',
-  'birth_date',
-  'genre_id',
+  'google_name',
+  'photo_url',
+  'custom_name',
+  'custom_photo_url',
   'created_at',
-  'updated_at'
+  'updated_at',
+  'last_login_at'
+  // 'password_hash' se oculta por seguridad
 ]
 
-const formatDate = () => moment(new Date()).utcOffset('-0500').format('YYYY-MM-DD HH:mm:ss');
+const DATE_COLOMBIA = new Date(new Date().setHours(new Date().getHours() - 5))
 
 class User {
   async login(email) {
@@ -64,34 +65,40 @@ class User {
 
 
   async createItem(body) {
-    const hashPass = await bcrypt.hash(body.password, 12)
-    return await UserModel.create({
+    const userData = {
       id: uuid4(),
+      google_id: body.google_id || null,
       email: body.email,
-      password: hashPass,
-      role: body.role || 'empleado',
-      name: body.name || null,
-      lastname: body.lastname || null,
-      birth_date: body.birth_date || null,
-      genre_id: body.genre_id || null,
-      created_at: formatDate(),
-      updated_at: formatDate(),
-    },
-      {
-        attributes: ARRAY_ATTRIBUTES,
-        raw: true
-      }
-    )
+      google_name: body.google_name,
+      photo_url: body.photo_url || null,
+      custom_name: body.custom_name || null,
+      custom_photo_url: body.custom_photo_url || null,
+      created_at: DATE_COLOMBIA,
+      updated_at: DATE_COLOMBIA
+    };
+
+    // Sólo crear password_hash si se proporciona una contraseña
+    if (body.password) {
+      userData.password_hash = await bcrypt.hash(body.password, 12);
+    }
+
+    return await UserModel.create(userData, {
+      attributes: ARRAY_ATTRIBUTES,
+      raw: true
+    });
   }
 
   async updateItem(body) {
-    const updated_at = formatDate();
-    if (body.password) body.password = await bcrypt.hash(body.password, 12);
-
     const updateInfo = {
       ...body,
-      updated_at,
+      updated_at: DATE_COLOMBIA
     };
+
+    // Si se proporciona una contraseña, generar el hash
+    if (body.password) {
+      updateInfo.password_hash = await bcrypt.hash(body.password, 12);
+      delete updateInfo.password; // Eliminar la contraseña sin hash
+    }
 
     const [rowsUpdated] = await UserModel.update(updateInfo, {
       where: { id: body.id },

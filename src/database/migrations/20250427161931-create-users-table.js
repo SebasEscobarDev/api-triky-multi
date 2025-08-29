@@ -13,45 +13,60 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.DataTypes.UUID,
       primaryKey: true,
     },
+    google_id: {
+      type: Sequelize.DataTypes.STRING,
+      allowNull: true,
+      comment: 'ID para autenticación Google'
+    },
+    google_name: {
+      type: Sequelize.DataTypes.STRING,
+      allowNull: false,
+      comment: 'Nombre obtenido de Google'
+    },
     email: {
       type: Sequelize.DataTypes.STRING,
       allowNull: false,
       unique: true,
       validate: {
         isEmail: true
-      }
+      },
+      comment: 'Email obtenido de Google'
     },
-    password: {
+    photo_url: {
       type: Sequelize.DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: [3, 255]
-      }
+      allowNull: true,
+      comment: 'URL de foto de Google'
     },
-    role: Sequelize.DataTypes.ENUM('admin', 'empleado'),
-    name: {
+    custom_name: {
       type: Sequelize.DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
+      comment: 'Nombre personalizado por el usuario'
     },
-    lastname: {
+    custom_photo_url: {
       type: Sequelize.DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
+      comment: 'URL de foto personalizada'
     },
-    birth_date: {
+    password_hash: {
       type: Sequelize.DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
+      comment: 'Hash de contraseña (opcional)'
     },
-    genre_id: {
-      type: Sequelize.DataTypes.STRING,
-      allowNull: true
-    },
+    // role field removed
     created_at: {
-      type: Sequelize.DataTypes.STRING,
-      allowNull: true
+      type: Sequelize.DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.DataTypes.NOW
     },
     updated_at: {
-      type: Sequelize.DataTypes.STRING,
-      allowNull: true
+      type: Sequelize.DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.DataTypes.NOW
+    },
+    last_login_at: {
+      type: Sequelize.DataTypes.DATE,
+      allowNull: true,
+      comment: 'Fecha del último inicio de sesión'
     },
   });
 }

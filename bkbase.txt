@@ -1,0 +1,66 @@
+1. users
+id (primario)
+google_id (para autenticación Google)
+name (nombre de Google)
+email (email de Google)
+photo_url (URL foto de Google)
+custom_name (nombre personalizado)
+custom_photo_url (URL foto personalizada)
+password_hash (hash de contraseña, opcional)
+created_at
+updated_at
+last_login_at
+
+
+2. games
+id (primario)
+player1_id (FK a users)
+player2_id (FK a users)
+current_player_id (quién tiene el turno)
+board_state (estado del tablero)
+winner_id (FK a users, nullable)
+is_draw (boolean)
+status ('active', 'completed', 'abandoned')
+created_at
+updated_at
+completed_at
+
+
+3. game_moves
+id (primario)
+game_id (FK a games)
+user_id (FK a users)
+position_x
+position_y
+move_number (orden del movimiento)
+created_at
+
+
+4. rankings
+id (primario)
+user_id (FK a users)
+points (puntos totales)
+wins (victorias)
+losses (derrotas)
+draws (empates)
+rank (posición en el ranking)
+updated_at
+
+
+5. user_settings
+id (primario)
+user_id (FK a users)
+theme (tema visual preferido)
+notifications_enabled (boolean)
+sound_enabled (boolean)
+updated_at
+
+
+6. notifications
+id (primario)
+user_id (FK a users)
+message
+type ('game_invite', 'turn', 'result', 'system')
+read (boolean)
+action_url (opcional)
+created_at

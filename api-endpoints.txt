@@ -1,0 +1,207 @@
+# API Endpoints Documentation for Triky Multi API
+
+## Root Endpoint
+------------------------------------------
+[GET] /
+- Description: Server health check
+- Returns: Confirmation that the backend server is running
+
+## Module: /users
+------------------------------------------
+[GET] /users
+- Description: Get all users
+- Middleware: None
+
+[GET] /users/:id
+- Description: Get user by ID
+- URL Params: id
+- Middleware: validateToken
+
+[POST] /users
+- Description: Create new user
+- Body Params: email (required), name (required, min length: 3), google_id (optional), photo_url (optional), custom_name (optional), custom_photo_url (optional), password (optional)
+- Middleware: validateFields, validateToken
+
+[PUT] /users
+- Description: Update user information
+- Body Params: id (required), google_id (optional), email (optional), name (optional), photo_url (optional), custom_name (optional), custom_photo_url (optional), password (optional)
+- Middleware: validateToken
+
+[DELETE] /users
+- Description: Delete current user
+- Middleware: validateToken
+
+[DELETE] /users/all
+- Description: Delete all users (admin function)
+- Middleware: validateToken
+
+[POST] /users/login
+- Description: Regular user login
+- Body Params: email (required), password (required, min length: 4)
+- Middleware: validateFields
+
+[POST] /users/google-login
+- Description: Google authentication login
+- Body Params: email (required), google_id (required), name (required)
+- Middleware: validateFields
+
+## Module: /games
+------------------------------------------
+[GET] /games
+- Description: Get all games
+- Middleware: validateToken
+
+[GET] /games/:id
+- Description: Get specific game by ID
+- URL Params: id (UUID)
+- Middleware: validateToken, validateFields
+
+[GET] /games/user/me
+- Description: Get all games for authenticated user
+- Middleware: validateToken
+
+[POST] /games
+- Description: Create a new game
+- Body Params: player2_id (required, UUID)
+- Note: player1_id is automatically set to the authenticated user's ID
+- Middleware: validateToken, validateFields
+
+[PUT] /games/:id
+- Description: Update game status
+- URL Params: id (UUID)
+- Body Params: status (allowed values: 'active', 'completed', 'abandoned')
+- Middleware: validateToken, validateFields
+
+[DELETE] /games/:id
+- Description: Delete specific game
+- URL Params: id (UUID)
+- Middleware: validateToken, validateFields
+
+[DELETE] /games/user/me
+- Description: Delete all games for authenticated user
+- Middleware: validateToken
+
+[POST] /games/:id/move
+- Description: Make a move in a game
+- URL Params: id (UUID)
+- Body Params: position (required, integer, 0-8)
+- Middleware: validateToken, validateFields
+
+## Module: /game-moves
+------------------------------------------
+[GET] /game-moves
+- Description: Get all moves (admin purpose)
+- Middleware: validateToken
+
+[GET] /game-moves/:id
+- Description: Get specific move by ID
+- URL Params: id (UUID)
+- Middleware: validateToken, validateFields
+
+[GET] /game-moves/game/:gameId
+- Description: Get all moves for a specific game
+- URL Params: gameId (UUID)
+- Middleware: validateToken, validateFields
+
+[GET] /game-moves/user/me
+- Description: Get all moves for authenticated user
+- Middleware: validateToken
+
+## Module: /rankings
+------------------------------------------
+[GET] /rankings/top
+- Description: Get top players
+- Middleware: None (Public route)
+
+[GET] /rankings
+- Description: Get all rankings
+- Middleware: validateToken
+
+[GET] /rankings/:id
+- Description: Get specific ranking by ID
+- URL Params: id (UUID)
+- Middleware: validateToken, validateFields
+
+[GET] /rankings/user/me
+- Description: Get current user's ranking
+- Middleware: validateToken
+
+[GET] /rankings/user/:userId
+- Description: Get specific user's ranking
+- URL Params: userId (UUID)
+- Middleware: validateToken, validateFields
+
+[POST] /rankings/recalculate
+- Description: Recalculate all ranks (admin operation)
+- Body Params: none required
+- Middleware: validateToken
+
+## Module: /user-settings
+------------------------------------------
+[GET] /user-settings/me
+- Description: Get settings for authenticated user
+- Middleware: validateToken
+
+[PUT] /user-settings/me
+- Description: Update settings for authenticated user
+- Body Params: theme (optional, string), notifications_enabled (optional, boolean), sound_enabled (optional, boolean)
+- Middleware: validateToken, validateFields
+
+[GET] /user-settings
+- Description: Get all settings (admin function)
+- Middleware: validateToken
+
+[GET] /user-settings/:id
+- Description: Get settings by ID
+- URL Params: id (UUID)
+- Middleware: validateToken, validateFields
+
+[GET] /user-settings/user/:userId
+- Description: Get settings for specific user
+- URL Params: userId (UUID)
+- Middleware: validateToken, validateFields
+
+## Module: /notifications
+------------------------------------------
+[GET] /notifications
+- Description: Get all notifications (admin function)
+- Middleware: validateToken
+
+[GET] /notifications/:id
+- Description: Get a specific notification by ID
+- URL Params: id (UUID)
+- Middleware: validateToken, validateFields
+
+[GET] /notifications/user/me
+- Description: Get all notifications for authenticated user
+- Query Params: read (optional, boolean), type (optional, values: 'game_invite', 'turn', 'result', 'system')
+- Middleware: validateToken, validateFields
+
+[POST] /notifications
+- Description: Create a new notification
+- Body Params: user_id (required, UUID), message (required), type (required, values: 'game_invite', 'turn', 'result', 'system'), action_url (optional)
+- Middleware: validateToken, validateFields
+
+[PUT] /notifications/:id/read
+- Description: Mark a notification as read
+- URL Params: id (UUID)
+- Middleware: validateToken, validateFields
+
+[PUT] /notifications/user/me/read
+- Description: Mark all notifications as read
+- Middleware: validateToken
+
+[DELETE] /notifications/:id
+- Description: Delete a specific notification
+- URL Params: id (UUID)
+- Middleware: validateToken, validateFields
+
+[DELETE] /notifications/user/me
+- Description: Delete all notifications for authenticated user
+- Middleware: validateToken
+
+## Other Routes
+------------------------------------------
+[GET] /uploads/*
+- Description: Static file serving for uploaded files
+- Middleware: express.static

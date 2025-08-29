@@ -5,6 +5,7 @@ import uuid4 from 'uuid4';
 
 /** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
+  const DATE_COLOMBIA = new Date(new Date().setHours(new Date().getHours() - 5))
   const passwordHash = await bcrypt.hash('Qaws12pj-22', 10);
 
   // Check if users already exist to avoid duplicate email error
@@ -21,29 +22,24 @@ export async function up(queryInterface, Sequelize) {
   if (!existingEmails.includes('admin@correo.com')) {
     usersToInsert.push({
       id: uuid4(),
-      name: 'Admin',
-      lastname: 'Principal',
+      google_name: 'Admin',
       email: 'admin@correo.com',
-      password: passwordHash,
-      role: 'admin',
-      genre_id: 1,
-      birth_date: '1990-01-01',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      password_hash: passwordHash,
+      created_at: DATE_COLOMBIA,
+      updated_at: DATE_COLOMBIA,
+      last_login_at: DATE_COLOMBIA
     });
   }
   
   if (!existingEmails.includes('empleado1@correo.com')) {
     usersToInsert.push({
       id: uuid4(),
-      name: 'Empleado 1',
+      google_name: 'Empleado 1',
       email: 'empleado1@correo.com',
-      password: passwordHash,
-      role: 'empleado',
-      genre_id: 1,
-      birth_date: '1990-01-01',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      password_hash: passwordHash,
+      created_at: DATE_COLOMBIA,
+      updated_at: DATE_COLOMBIA,
+      last_login_at: DATE_COLOMBIA
     });
   }
   
